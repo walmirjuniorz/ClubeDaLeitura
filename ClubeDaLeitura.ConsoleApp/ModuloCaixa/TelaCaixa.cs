@@ -1,12 +1,16 @@
+using ClubeDaLeitura.ConsoleApp.ModuloRevista;
+
 namespace ClubeDaLeitura.ConsoleApp.ModuloCaixa;
 
 public class TelaCaixa
 {
-    private RepositorioCaixa repositorioCaixa;
+    private readonly RepositorioCaixa repositorioCaixa;
+    private readonly RepositorioRevista repositorioRevista;
 
-    public TelaCaixa(RepositorioCaixa repositorioCaixa)
+    public TelaCaixa(RepositorioCaixa repositorioCaixa, RepositorioRevista repositorioRevista)
     {
         this.repositorioCaixa = repositorioCaixa;
+        this.repositorioRevista = repositorioRevista;
     }
 
     public string? ObterOpcaoMenu()
@@ -35,6 +39,27 @@ public class TelaCaixa
 
         Caixa novaCaixa = ObterDadosCadastrais();
 
+        Caixa[] caixas = repositorioCaixa.SelecionarTodos();
+
+        for (int i = 0; i < caixas.Length; i++)
+        {
+            Caixa c = caixas[i];
+
+            if (c == null)
+                continue;
+
+            if (c.Etiqueta.ToLower() == novaCaixa.Etiqueta.ToLower())
+            {
+                Console.WriteLine("---------------------------------");
+                Console.WriteLine($"Já existe uma caixa com a etiqueta \"{novaCaixa.Etiqueta}\"!");
+                Console.WriteLine("---------------------------------");
+                Console.WriteLine("Digite ENTER para continuar");
+                Console.ReadLine();
+
+                return;
+            }
+        }
+
         repositorioCaixa.Cadastrar(novaCaixa);
 
         Console.WriteLine("---------------------------------");
@@ -61,6 +86,27 @@ public class TelaCaixa
 
         Caixa caixaAtualizada = ObterDadosCadastrais();
 
+        Caixa[] caixas = repositorioCaixa.SelecionarTodos();
+
+        for (int i = 0; i < caixas.Length; i++)
+        {
+            Caixa c = caixas[i];
+
+            if (c == null)
+                continue;
+
+            if (c.Id != idSelecionado && c.Etiqueta.ToLower() == caixaAtualizada.Etiqueta.ToLower())
+            {
+                Console.WriteLine("---------------------------------");
+                Console.WriteLine($"Já existe uma caixa com a etiqueta \"{caixaAtualizada.Etiqueta}\"!");
+                Console.WriteLine("---------------------------------");
+                Console.WriteLine("Digite ENTER para continuar");
+                Console.ReadLine();
+
+                return;
+            }
+        }
+
         repositorioCaixa.Editar(idSelecionado, caixaAtualizada);
 
         Console.WriteLine("---------------------------------");
@@ -70,6 +116,7 @@ public class TelaCaixa
         Console.ReadLine();
     }
 
+    // Não permitir excluir uma caixa caso tenha revistas vinculadas
     public void Excluir()
     {
         Console.WriteLine("---------------------------------");
@@ -82,6 +129,27 @@ public class TelaCaixa
 
         Console.Write("Digite o ID do registro que deseja excluir: ");
         int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+        Revista[] revistas = repositorioRevista.SelecionarTodos();
+
+        for (int i = 0; i < revistas.Length; i++)
+        {
+            Revista r = revistas[i];
+
+            if (r == null)
+                continue;
+
+            if (r.Caixa.Id == idSelecionado)
+            {
+                Console.WriteLine("---------------------------------");
+                Console.WriteLine("Não é possível excluir uma caixa com revistas vinculadas!");
+                Console.WriteLine("---------------------------------");
+                Console.WriteLine("Digite ENTER para continuar");
+                Console.ReadLine();
+
+                return;
+            }
+        }
 
         repositorioCaixa.Excluir(idSelecionado);
 
