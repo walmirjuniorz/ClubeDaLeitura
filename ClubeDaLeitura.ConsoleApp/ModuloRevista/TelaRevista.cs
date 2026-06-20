@@ -1,5 +1,4 @@
 using ClubeDaLeitura.ConsoleApp.ModuloCaixa;
-
 namespace ClubeDaLeitura.ConsoleApp.ModuloRevista;
 
 public class TelaRevista
@@ -12,7 +11,6 @@ public class TelaRevista
         this.repositorioRevista = repositorioRevista;
         this.repositorioCaixa = repositorioCaixa;
     }
-
     public string? ObterOpcaoMenu()
     {
         Console.WriteLine("---------------------------------");
@@ -30,7 +28,6 @@ public class TelaRevista
 
         return opcaoMenu;
     }
-
     public void Cadastrar()
     {
         Console.WriteLine("---------------------------------");
@@ -49,7 +46,6 @@ public class TelaRevista
         Console.WriteLine("Digite ENTER para continuar");
         Console.ReadLine();
     }
-
     public void Editar()
     {
         Console.WriteLine("---------------------------------");
@@ -78,7 +74,6 @@ public class TelaRevista
         Console.WriteLine("Digite ENTER para continuar");
         Console.ReadLine();
     }
-
     public void Excluir()
     {
         Console.WriteLine("---------------------------------");
@@ -139,7 +134,6 @@ public class TelaRevista
             Console.ReadLine();
         }
     }
-
     private Revista ObterDadosCadastrais()
     {
         Console.Write("Informe o título da revista: ");
