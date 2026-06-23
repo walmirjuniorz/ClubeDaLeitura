@@ -2,9 +2,6 @@
 using ClubeDaLeitura.ConsoleApp.ModuloCaixa;
 using ClubeDaLeitura.ConsoleApp.ModuloRevista;
 
-//RepositorioBase repositorioC = new RepositorioBase();
-//RepositorioBase repositorioR = new RepositorioBase();
-
 RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
 RepositorioRevista repositorioRevista = new RepositorioRevista();
 
