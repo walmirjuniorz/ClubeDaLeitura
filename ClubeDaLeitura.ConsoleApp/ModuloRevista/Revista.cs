@@ -28,15 +28,6 @@ public class Revista : EntidadeBase
         AnoPublicacao = anoPublicacao;
         Caixa = caixa;
     }
-
-    public void Atualizar(Revista revistaAtualizada)
-    {
-        Titulo = revistaAtualizada.Titulo;
-        NumeroEdicao = revistaAtualizada.NumeroEdicao;
-        AnoPublicacao = revistaAtualizada.AnoPublicacao;
-        Caixa = revistaAtualizada.Caixa;
-    }
-
     public override void Atualizar(EntidadeBase entidadeAtualizada)
     {
         Revista revistaAtualizada = (Revista)entidadeAtualizada;

@@ -2,17 +2,17 @@
 using ClubeDaLeitura.ConsoleApp.ModuloCaixa;
 using ClubeDaLeitura.ConsoleApp.ModuloRevista;
 
-RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
+RepositorioCaixa repositorio = new RepositorioCaixa();
 RepositorioRevista repositorioRevista = new RepositorioRevista();
 
 Caixa caixaTeste = new Caixa("Ação", "Vermelho", 5);
 Revista revistaTeste = new Revista("Action Comics", 1, 1976, caixaTeste);
 
-repositorioCaixa.Cadastrar(caixaTeste);
+repositorio.Cadastrar(caixaTeste);
 repositorioRevista.Cadastrar(revistaTeste);
 
-TelaCaixa telaCaixa = new TelaCaixa(repositorioCaixa, repositorioRevista);
-TelaRevista telaRevista = new TelaRevista(repositorioRevista, repositorioCaixa);
+TelaCaixa telaCaixa = new TelaCaixa("Caixa", repositorio, repositorioRevista);
+TelaRevista telaRevista = new TelaRevista("Revista", repositorioRevista, repositorio);
 
 TelaPrincipal telaPrincipal = new TelaPrincipal();
 

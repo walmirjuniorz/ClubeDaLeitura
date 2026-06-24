@@ -2,50 +2,18 @@ using ClubeDaLeitura.ConsoleApp.Compartilhado;
 using ClubeDaLeitura.ConsoleApp.ModuloCaixa;
 namespace ClubeDaLeitura.ConsoleApp.ModuloRevista;
 
-public class TelaRevista
+public class TelaRevista : TelaBase
 {
     private readonly RepositorioRevista repositorioRevista;
     private readonly RepositorioCaixa repositorioCaixa;
 
-    public TelaRevista(RepositorioRevista repositorioRevista, RepositorioCaixa repositorioCaixa)
+    public TelaRevista(
+        string nomeEntidade,
+        RepositorioRevista repositorioRevista,
+        RepositorioCaixa repositorioCaixa) : base(nomeEntidade, repositorioRevista)
     {
         this.repositorioRevista = repositorioRevista;
         this.repositorioCaixa = repositorioCaixa;
-    }
-    public string? ObterOpcaoMenu()
-    {
-        Console.WriteLine("---------------------------------");
-        Console.WriteLine("Gestão de Revistas");
-        Console.WriteLine("---------------------------------");
-        Console.WriteLine("1 - Cadastrar revista");
-        Console.WriteLine("2 - Editar revista");
-        Console.WriteLine("3 - Excluir revista");
-        Console.WriteLine("4 - Visualizar revistas");
-        Console.WriteLine("S - Sair");
-        Console.WriteLine("---------------------------------");
-        Console.Write("> ");
-
-        string? opcaoMenu = Console.ReadLine()?.ToUpper();
-
-        return opcaoMenu;
-    }
-    public void Cadastrar()
-    {
-        Console.WriteLine("---------------------------------");
-        Console.WriteLine("Cadastro de Revista");
-        Console.WriteLine("---------------------------------");
-
-        // 1. Obter os dados cadastrais da revista
-        Revista novaRevista = ObterDadosCadastrais();
-
-        // 2. Armazenar a revista no repositório
-        repositorioRevista.Cadastrar(novaRevista);
-
-        Console.WriteLine("---------------------------------");
-        Console.WriteLine($"O registro \"{novaRevista.Titulo}\" foi cadastrado com sucesso!");
-        Console.WriteLine("---------------------------------");
-        Console.WriteLine("Digite ENTER para continuar");
-        Console.ReadLine();
     }
     public void Editar()
     {
@@ -64,7 +32,7 @@ public class TelaRevista
         Console.WriteLine("---------------------------------");
 
         // 2. Obter os novos dados da revista
-        Revista revistaAtualizada = ObterDadosCadastrais();
+        Revista revistaAtualizada = (Revista)ObterDadosCadastrais();
 
         // 3. Editar a revista no repositório
         repositorioRevista.Editar(idSelecionado, revistaAtualizada);
@@ -135,7 +103,7 @@ public class TelaRevista
             Console.ReadLine();
         }
     }
-    private Revista ObterDadosCadastrais()
+    protected override EntidadeBase ObterDadosCadastrais()
     {
         Console.Write("Informe o título da revista: ");
         string? titulo = Console.ReadLine();

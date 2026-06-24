@@ -2,69 +2,18 @@ using ClubeDaLeitura.ConsoleApp.Compartilhado;
 using ClubeDaLeitura.ConsoleApp.ModuloRevista;
 namespace ClubeDaLeitura.ConsoleApp.ModuloCaixa;
 
-public class TelaCaixa
+public class TelaCaixa : TelaBase
 {
     private readonly RepositorioCaixa repositorioCaixa;
     private readonly RepositorioRevista repositorioRevista;
 
-    public TelaCaixa(RepositorioCaixa repositorioCaixa, RepositorioRevista repositorioRevista)
+    public TelaCaixa(
+        string nomeEntidade,
+        RepositorioCaixa repositorioCaixa,
+        RepositorioRevista repositorioRevista) : base(nomeEntidade, repositorioCaixa)
     {
         this.repositorioCaixa = repositorioCaixa;
         this.repositorioRevista = repositorioRevista;
-    }
-    public string? ObterOpcaoMenu()
-    {
-        Console.WriteLine("---------------------------------");
-        Console.WriteLine("Gestão de Caixas");
-        Console.WriteLine("---------------------------------");
-        Console.WriteLine("1 - Cadastrar caixa");
-        Console.WriteLine("2 - Editar caixa");
-        Console.WriteLine("3 - Excluir caixa");
-        Console.WriteLine("4 - Visualizar caixas");
-        Console.WriteLine("S - Sair");
-        Console.WriteLine("---------------------------------");
-        Console.Write("> ");
-
-        string? opcaoMenuInterno = Console.ReadLine()?.ToUpper();
-
-        return opcaoMenuInterno;
-    }
-    public void Cadastrar()
-    {
-        Console.WriteLine("---------------------------------");
-        Console.WriteLine("Cadastro de Caixa");
-        Console.WriteLine("---------------------------------");
-
-        Caixa novaCaixa = ObterDadosCadastrais();
-
-        EntidadeBase[] caixas = repositorioCaixa.SelecionarTodos();
-
-        for (int i = 0; i < caixas.Length; i++)
-        {
-            Caixa c = (Caixa)caixas[i];
-
-            if (c == null)
-                continue;
-
-            if (c.Etiqueta.ToLower() == novaCaixa.Etiqueta.ToLower())
-            {
-                Console.WriteLine("---------------------------------");
-                Console.WriteLine($"Já existe uma caixa com a etiqueta \"{novaCaixa.Etiqueta}\"!");
-                Console.WriteLine("---------------------------------");
-                Console.WriteLine("Digite ENTER para continuar");
-                Console.ReadLine();
-
-                return;
-            }
-        }
-
-        repositorioCaixa.Cadastrar(novaCaixa);
-
-        Console.WriteLine("---------------------------------");
-        Console.WriteLine($"O registro \"{novaCaixa.Etiqueta}\" foi cadastrado com sucesso!");
-        Console.WriteLine("---------------------------------");
-        Console.WriteLine("Digite ENTER para continuar");
-        Console.ReadLine();
     }
     public void Editar()
     {
@@ -81,7 +30,7 @@ public class TelaCaixa
 
         Console.WriteLine("---------------------------------");
 
-        Caixa caixaAtualizada = ObterDadosCadastrais();
+        Caixa caixaAtualizada = (Caixa)ObterDadosCadastrais();
 
         EntidadeBase[] caixas = repositorioCaixa.SelecionarTodos();
 
@@ -155,7 +104,6 @@ public class TelaCaixa
         Console.WriteLine("Digite ENTER para continuar");
         Console.ReadLine();
     }
-
     public void VisualizarTodos(bool deveExibirCabecalho)
     {
         if (deveExibirCabecalho)
@@ -192,7 +140,7 @@ public class TelaCaixa
             Console.ReadLine();
         }
     }
-    private Caixa ObterDadosCadastrais()
+    protected override EntidadeBase ObterDadosCadastrais()
     {
         Console.Write("Informe a etiqueta da caixa: ");
         string? etiqueta = Console.ReadLine();
