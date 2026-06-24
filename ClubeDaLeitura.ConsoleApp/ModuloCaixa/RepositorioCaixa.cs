@@ -4,5 +4,4 @@ namespace ClubeDaLeitura.ConsoleApp.ModuloCaixa;
 
 public class RepositorioCaixa : RepositorioBase
 {
-    private Caixa[] registros = new Caixa[100];
 }

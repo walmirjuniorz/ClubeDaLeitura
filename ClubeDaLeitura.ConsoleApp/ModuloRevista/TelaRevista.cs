@@ -113,11 +113,11 @@ public class TelaRevista
             "Id", "Título", "Edição", "Ano", "Caixa"
         );
 
-        Revista[] revistas = repositorioRevista.SelecionarTodos();
+        EntidadeBase[] revistas = repositorioRevista.SelecionarTodos();
 
         for (int i = 0; i < revistas.Length; i++)
         {
-            Revista r = revistas[i];
+            Revista r = (Revista)revistas[i];
 
             if (r == null)
                 continue;

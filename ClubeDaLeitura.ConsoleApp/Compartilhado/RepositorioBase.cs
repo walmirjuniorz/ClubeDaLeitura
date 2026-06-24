@@ -59,7 +59,6 @@ public abstract class RepositorioBase
 
         return null;
     }
-
     public EntidadeBase[] SelecionarTodos()
     {
         return registros;
