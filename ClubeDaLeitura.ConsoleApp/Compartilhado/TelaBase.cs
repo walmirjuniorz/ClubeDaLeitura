@@ -37,25 +37,6 @@ public abstract class TelaBase
 
         EntidadeBase[] registros = repositorio.SelecionarTodos();
 
-        // for (int i = 0; i < registros.Length; i++)
-        // {
-        //     EntidadeBase e = registros[i];
-
-        //     if (e == null)
-        //         continue;
-
-        //     if (e.Etiqueta.ToLower() == novaEntidade.Etiqueta.ToLower())
-        //     {
-        //         Console.WriteLine("---------------------------------");
-        //         Console.WriteLine($"Já existe uma caixa com a etiqueta \"{novaEntidade.Etiqueta}\"!");
-        //         Console.WriteLine("---------------------------------");
-        //         Console.WriteLine("Digite ENTER para continuar");
-        //         Console.ReadLine();
-
-        //         return;
-        //     }
-        // }
-
         repositorio.Cadastrar(novaEntidade);
 
         Console.WriteLine("---------------------------------");
@@ -64,5 +45,53 @@ public abstract class TelaBase
         Console.WriteLine("Digite ENTER para continuar");
         Console.ReadLine();
     }
+    public void Editar()
+    {
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine($"Edição de {nomeEntidade}");
+        Console.WriteLine("---------------------------------");
+
+        VisualizarTodos(false);
+
+        Console.WriteLine("---------------------------------");
+
+        Console.Write("Digite o ID do registro que deseja editar: ");
+        int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+        Console.WriteLine("---------------------------------");
+
+        EntidadeBase entidadeAtualizada = ObterDadosCadastrais();
+
+        repositorio.Editar(idSelecionado, entidadeAtualizada);
+
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine($"O registro \"{entidadeAtualizada.Id}\" foi editado com sucesso!");
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine("Digite ENTER para continuar");
+        Console.ReadLine();
+    }
+    public void Excluir()
+    {
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine($"Exclusão de {nomeEntidade}");
+        Console.WriteLine("---------------------------------");
+
+        VisualizarTodos(false);
+
+        Console.WriteLine("---------------------------------");
+
+        Console.Write("Digite o ID do registro que deseja excluir: ");
+        int idSelecionado = Convert.ToInt32(Console.ReadLine());
+
+        repositorio.Excluir(idSelecionado);
+
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine($"O registro \"{idSelecionado}\" foi excluído com sucesso!");
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine("Digite ENTER para continuar");
+        Console.ReadLine();
+    }
+    public abstract void VisualizarTodos(bool deveExibirCabecalho);
+
     protected abstract EntidadeBase ObterDadosCadastrais();
 }
