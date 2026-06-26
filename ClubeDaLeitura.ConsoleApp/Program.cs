@@ -1,23 +1,28 @@
 ﻿using ClubeDaLeitura.ConsoleApp.Compartilhado;
 using ClubeDaLeitura.ConsoleApp.ModuloAmigo;
 using ClubeDaLeitura.ConsoleApp.ModuloCaixa;
+using ClubeDaLeitura.ConsoleApp.ModuloEmprestimo;
 using ClubeDaLeitura.ConsoleApp.ModuloRevista;
 
 RepositorioCaixa repositorio = new RepositorioCaixa();
 RepositorioRevista repositorioRevista = new RepositorioRevista();
 RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
+RepositorioEmprestimo repositorioEmprestimo = new RepositorioEmprestimo();
 
 Caixa caixaTeste = new Caixa("Ação", "Vermelho", 5);
 Revista revistaTeste = new Revista("Action Comics", 1, 1976, caixaTeste);
 Amigo amigoTeste = new Amigo("Junior Testes", "Seu Oswaldo", "49988776655");
+Emprestimo emprestimoTeste = new Emprestimo(revistaTeste, amigoTeste);
 
 repositorio.Cadastrar(caixaTeste);
 repositorioRevista.Cadastrar(revistaTeste);
 repositorioAmigo.Cadastrar(amigoTeste);
+repositorioEmprestimo.Cadastrar(amigoTeste);
 
 TelaCaixa telaCaixa = new TelaCaixa("Caixa", repositorio, repositorioRevista);
 TelaRevista telaRevista = new TelaRevista("Revista", repositorioRevista, repositorio);
 TelaAmigo telaAmigo = new TelaAmigo("Amigo", repositorioAmigo);
+TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo);
 
 TelaPrincipal telaPrincipal = new TelaPrincipal();
 
@@ -95,7 +100,19 @@ while (true)
 
         else if (opcaoMenuPrincipal == "4") // Empréstimos
         {
+            string? opcaoMenuInterno = telaEmprestimo.ObterOpcaoMenu();
 
+            if (opcaoMenuInterno == "S")
+                break;
+
+            if (opcaoMenuInterno == "1")
+                telaEmprestimo.Abrir();
+
+            else if (opcaoMenuInterno == "2")
+                telaEmprestimo.Concluir();
+
+            else if (opcaoMenuInterno == "3")
+                telaEmprestimo.VisualizarTodos(true);
         }
     }
 }
