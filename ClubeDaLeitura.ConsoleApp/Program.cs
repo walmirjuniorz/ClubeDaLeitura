@@ -4,7 +4,7 @@ using ClubeDaLeitura.ConsoleApp.ModuloCaixa;
 using ClubeDaLeitura.ConsoleApp.ModuloEmprestimo;
 using ClubeDaLeitura.ConsoleApp.ModuloRevista;
 
-RepositorioCaixa repositorio = new RepositorioCaixa();
+RepositorioCaixa repositorioCaixa = new RepositorioCaixa();
 RepositorioRevista repositorioRevista = new RepositorioRevista();
 RepositorioAmigo repositorioAmigo = new RepositorioAmigo();
 RepositorioEmprestimo repositorioEmprestimo = new RepositorioEmprestimo();
@@ -14,15 +14,19 @@ Revista revistaTeste = new Revista("Action Comics", 1, 1976, caixaTeste);
 Amigo amigoTeste = new Amigo("Junior Testes", "Seu Oswaldo", "49988776655");
 Emprestimo emprestimoTeste = new Emprestimo(revistaTeste, amigoTeste);
 
-repositorio.Cadastrar(caixaTeste);
+repositorioCaixa.Cadastrar(caixaTeste);
 repositorioRevista.Cadastrar(revistaTeste);
 repositorioAmigo.Cadastrar(amigoTeste);
-repositorioEmprestimo.Cadastrar(amigoTeste);
+repositorioEmprestimo.Cadastrar(emprestimoTeste);
 
-TelaCaixa telaCaixa = new TelaCaixa("Caixa", repositorio, repositorioRevista);
-TelaRevista telaRevista = new TelaRevista("Revista", repositorioRevista, repositorio);
+TelaCaixa telaCaixa = new TelaCaixa("Caixa", repositorioCaixa, repositorioRevista);
+TelaRevista telaRevista = new TelaRevista("Revista", repositorioRevista, repositorioCaixa);
 TelaAmigo telaAmigo = new TelaAmigo("Amigo", repositorioAmigo);
-TelaEmprestimo telaEmprestimo = new TelaEmprestimo(repositorioEmprestimo);
+TelaEmprestimo telaEmprestimo = new TelaEmprestimo(
+    repositorioEmprestimo,
+    repositorioAmigo,
+    repositorioRevista
+);
 
 TelaPrincipal telaPrincipal = new TelaPrincipal();
 

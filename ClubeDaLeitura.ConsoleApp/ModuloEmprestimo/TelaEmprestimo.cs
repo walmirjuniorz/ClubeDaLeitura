@@ -1,14 +1,23 @@
 using ClubeDaLeitura.ConsoleApp.Compartilhado;
+using ClubeDaLeitura.ConsoleApp.ModuloAmigo;
+using ClubeDaLeitura.ConsoleApp.ModuloRevista;
 
 namespace ClubeDaLeitura.ConsoleApp.ModuloEmprestimo;
 
 public class TelaEmprestimo
 {
     private readonly RepositorioEmprestimo repositorioEmprestimo;
+    private readonly RepositorioAmigo repositorioAmigo;
+    private readonly RepositorioRevista repositorioRevista;
 
-    public TelaEmprestimo(RepositorioEmprestimo repositorioEmprestimo)
+    public TelaEmprestimo(
+        RepositorioEmprestimo repositorioEmprestimo,
+        RepositorioAmigo repositorioAmigo,
+        RepositorioRevista repositorioRevista)
     {
         this.repositorioEmprestimo = repositorioEmprestimo;
+        this.repositorioAmigo = repositorioAmigo;
+        this.repositorioRevista = repositorioRevista;
     }
     public string? ObterOpcaoMenu()
     {
@@ -28,11 +37,58 @@ public class TelaEmprestimo
     }
     public void Abrir()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine("Abertura de Empréstimos");
+        Console.WriteLine("---------------------------------");
+
+        VisualizarRevistas();
+
+        Console.WriteLine("---------------------------------");
+        Console.Write("Digite o ID da revista que deseja emprestar: ");
+        int idRevista = Convert.ToInt32(Console.ReadLine());
+
+        VisualizarAmigos();
+
+        Console.WriteLine("---------------------------------");
+        Console.Write("Digite o ID do amigo que ira receber a revista: ");
+        int idAmigo = Convert.ToInt32(Console.ReadLine());
+
+        Revista? revistadaSelecionada = (Revista?)repositorioRevista.SelecionarPorId(idRevista);
+        Amigo? amigoSelecionado = (Amigo?)repositorioAmigo.SelecionarPorId(idAmigo);
+
+        Emprestimo novoEmprestimo = new Emprestimo(revistadaSelecionada, amigoSelecionado);
+
+        repositorioEmprestimo.Cadastrar(novoEmprestimo);
+
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine($"O Empréstimo \"{novoEmprestimo.Id}\" foi aberto com sucesso!");
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine("Digite ENTER para continuar");
+        Console.ReadLine();
     }
     public void Concluir()
     {
-        throw new NotImplementedException();
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine("Conclusao de Empréstimos");
+        Console.WriteLine("---------------------------------");
+
+        VisualizarTodos(false);
+
+        Console.WriteLine("---------------------------------");
+        Console.Write("Digite o ID do empréstimo que deseja concluir: ");
+        int idEmprestimo = Convert.ToInt32(Console.ReadLine());
+
+        Emprestimo? emprestimo = (Emprestimo?)repositorioEmprestimo.SelecionarPorId(idEmprestimo);
+
+        emprestimo.Status = StatusEmprestimo.Concluído;
+
+        repositorioEmprestimo.Editar(idEmprestimo, emprestimo);
+
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine($"O Empréstimo \"{emprestimo.Id}\" foi aberto com sucesso!");
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine("Digite ENTER para continuar");
+        Console.ReadLine();
     }
     public void VisualizarTodos(bool deveExibirCabecalho)
     {
@@ -44,8 +100,8 @@ public class TelaEmprestimo
         }
 
         Console.WriteLine(
-            "{0, -7} | {1, -15} | {2, -15} | {3, -15} | {4, - 15}",
-            "Id", "Revista", "Amigo", "Abertura", "Conclusao Prev."
+            "{0, -5} | {1, -15} | {2, -15} | {3, -12} | {4, -15} | {5, -13}",
+            "Id", "Revista", "Amigo", "Abertura", "Conclusao Prev.", "Status"
             );
 
         EntidadeBase[] emprestimos = repositorioEmprestimo.SelecionarTodos();
@@ -58,9 +114,13 @@ public class TelaEmprestimo
                 continue;
 
             Console.WriteLine(
-                "{0, -7} | {1, -15} | {2, -15} | {3, -15} | {4, - 15}",
-                e.Id, e.Revista.Titulo, e.Amigo.Nome,
-                e.DataAbertura.ToShortDateString(), e.DataConclusaoPrevista.ToShortDateString()
+                "{0, -5} | {1, -15} | {2, -15} | {3, -12} | {4, -15} | {5, -13}",
+                e.Id,
+                e.Revista.Titulo,
+                e.Amigo.Nome,
+                e.DataAbertura.ToShortDateString(),
+                e.DataConclusaoPrevista.ToShortDateString(),
+                e.Status.ToString()
                 );
         }
 
@@ -69,6 +129,50 @@ public class TelaEmprestimo
             Console.WriteLine("---------------------------------");
             Console.WriteLine("Digite ENTER para continuar");
             Console.ReadLine();
+        }
+    }
+    public void VisualizarRevistas()
+    {
+        Console.WriteLine(
+            "{0, -7} | {1, -25} | {2, -6} | {3, -4} | {4, -15}",
+            "Id", "Título", "Edição", "Ano", "Caixa"
+        );
+
+        EntidadeBase[] revistas = repositorioRevista.SelecionarTodos();
+
+        for (int i = 0; i < revistas.Length; i++)
+        {
+            Revista r = (Revista)revistas[i];
+
+            if (r == null)
+                continue;
+
+            Console.WriteLine(
+                "{0, -7} | {1, -25} | {2, -6} | {3, -4} | {4, -15}",
+                r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao, r.Caixa.Etiqueta
+            );
+        }
+    }
+    public void VisualizarAmigos()
+    {
+        Console.WriteLine(
+            "{0, -7} | {1, -15} | {2, -15} | {3, -13}",
+            "Id", "Nome", "Responsavel", "Telefone"
+            );
+
+        EntidadeBase[] amigos = repositorioAmigo.SelecionarTodos();
+
+        for (int i = 0; i < amigos.Length; i++)
+        {
+            Amigo a = (Amigo)amigos[i];
+
+            if (a == null)
+                continue;
+
+            Console.WriteLine(
+                "{0, -7} | {1, -15} | {2, -15} | {3, -13}",
+                a.Id, a.Nome, a.NomeResposavel, a.Telefone
+            );
         }
     }
 }

@@ -17,9 +17,9 @@ public class Amigo : EntidadeBase
     {
         Id = GeradorIds.ObterIdAmigo();
 
-        nome = nome;
-        nomeResposavel = nomeResposavel;
-        telefone = telefone;
+        Nome = nome;
+        NomeResposavel = nomeResposavel;
+        Telefone = telefone;
     }
     public override void Atualizar(EntidadeBase entidadeAtualizada)
     {

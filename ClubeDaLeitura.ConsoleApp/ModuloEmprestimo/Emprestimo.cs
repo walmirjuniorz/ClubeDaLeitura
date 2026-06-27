@@ -4,6 +4,13 @@ using ClubeDaLeitura.ConsoleApp.ModuloCaixa;
 using ClubeDaLeitura.ConsoleApp.ModuloRevista;
 using ClubeDaLeitura.ConsoleApp.Utilidades;
 namespace ClubeDaLeitura.ConsoleApp.ModuloEmprestimo;
+
+public enum StatusEmprestimo
+{
+    Aberto,
+    Concluído,
+    Atrasado
+}
 /*
     ● Campos obrigatórios:
         ○ Amigo
@@ -16,6 +23,7 @@ public class Emprestimo : EntidadeBase
 {
     public Revista Revista { get; set; }
     public Amigo Amigo { get; set; }
+    public StatusEmprestimo Status { get; set; }
     public DateTime DataAbertura { get; private set; }
     public DateTime DataConclusaoPrevista
     {
@@ -39,6 +47,8 @@ public class Emprestimo : EntidadeBase
     }
     public override void Atualizar(EntidadeBase entidadeAtualizada)
     {
-        throw new NotImplementedException();
+        Emprestimo emprestimoAtualizado = (Emprestimo)entidadeAtualizada;
+
+        Status = emprestimoAtualizado.Status;
     }
 }
