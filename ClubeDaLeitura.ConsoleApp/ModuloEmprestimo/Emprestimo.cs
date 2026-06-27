@@ -7,6 +7,7 @@ namespace ClubeDaLeitura.ConsoleApp.ModuloEmprestimo;
 
 public enum StatusEmprestimo
 {
+    Indefinido,
     Aberto,
     Concluído,
     Atrasado
@@ -37,6 +38,14 @@ public class Emprestimo : EntidadeBase
             return DataConclusaoPrevista;
         }
     }
+    public bool EstaAberto
+    {
+        get
+        {
+            return Status == StatusEmprestimo.Aberto;
+
+        }
+    }
     public Emprestimo(Revista revista, Amigo amigo)
     {
         Id = GeradorIds.ObterIdsEmprestimo();
@@ -44,6 +53,16 @@ public class Emprestimo : EntidadeBase
 
         Revista = revista;
         Amigo = amigo;
+    }
+    public void Abrir()
+    {
+        Status = StatusEmprestimo.Aberto;
+        Revista.Emprestar();
+    }
+    public void Concluir()
+    {
+        Status = StatusEmprestimo.Concluído;
+        Revista.Devolver();
     }
     public override void Atualizar(EntidadeBase entidadeAtualizada)
     {

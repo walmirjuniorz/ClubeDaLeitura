@@ -56,7 +56,38 @@ public class TelaEmprestimo
         Revista? revistadaSelecionada = (Revista?)repositorioRevista.SelecionarPorId(idRevista);
         Amigo? amigoSelecionado = (Amigo?)repositorioAmigo.SelecionarPorId(idAmigo);
 
+        if (revistadaSelecionada == null)
+        {
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine($"A revista \"{idRevista}\" nao foi encontrado!");
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine("Digite ENTER para continuar");
+            Console.ReadLine();
+            return;
+        }
+        if (amigoSelecionado == null)
+        {
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine($"O amigo \"{idAmigo}\" nao foi encontrado!");
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine("Digite ENTER para continuar");
+            Console.ReadLine();
+            return;
+        }
+        if (!revistadaSelecionada.EstaDisponivel)
+        {
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine($"A revista \"{revistadaSelecionada.Titulo}\" está indisponível!");
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine("Digite ENTER para continuar");
+            Console.ReadLine();
+            return;
+        }
+
         Emprestimo novoEmprestimo = new Emprestimo(revistadaSelecionada, amigoSelecionado);
+
+        novoEmprestimo.Abrir();
+        revistadaSelecionada.Emprestar();
 
         repositorioEmprestimo.Cadastrar(novoEmprestimo);
 
@@ -80,7 +111,27 @@ public class TelaEmprestimo
 
         Emprestimo? emprestimo = (Emprestimo?)repositorioEmprestimo.SelecionarPorId(idEmprestimo);
 
-        emprestimo.Status = StatusEmprestimo.Concluído;
+        if (emprestimo == null)
+        {
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine($"O Empréstimo \"{idEmprestimo}\" nao foi encontrado!");
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine("Digite ENTER para continuar");
+            Console.ReadLine();
+            return;
+        }
+
+        if (!emprestimo.EstaAberto)
+        {
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine($"O Empréstimo \"{idEmprestimo}\" já está concluido!");
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine("Digite ENTER para continuar");
+            Console.ReadLine();
+            return;
+        }
+
+        emprestimo.Concluir();
 
         repositorioEmprestimo.Editar(idEmprestimo, emprestimo);
 
@@ -134,8 +185,8 @@ public class TelaEmprestimo
     public void VisualizarRevistas()
     {
         Console.WriteLine(
-            "{0, -7} | {1, -25} | {2, -6} | {3, -4} | {4, -15}",
-            "Id", "Título", "Edição", "Ano", "Caixa"
+            "{0, -7} | {1, -25} | {2, -6} | {3, -4} | {4, -15} | {5, -12}",
+            "Id", "Título", "Edição", "Ano", "Caixa", "Status"
         );
 
         EntidadeBase[] revistas = repositorioRevista.SelecionarTodos();
@@ -148,8 +199,8 @@ public class TelaEmprestimo
                 continue;
 
             Console.WriteLine(
-                "{0, -7} | {1, -25} | {2, -6} | {3, -4} | {4, -15}",
-                r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao, r.Caixa.Etiqueta
+                "{0, -7} | {1, -25} | {2, -6} | {3, -4} | {4, -15} | {5, -12}",
+                r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao, r.Caixa.Etiqueta, r.Status.ToString()
             );
         }
     }
