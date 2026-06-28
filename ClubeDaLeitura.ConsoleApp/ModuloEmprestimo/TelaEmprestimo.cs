@@ -65,6 +65,15 @@ public class TelaEmprestimo
             Console.ReadLine();
             return;
         }
+        if (!revistadaSelecionada.EstaDisponivel)
+        {
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine($"A revista \"{revistadaSelecionada.Titulo}\" está indisponível!");
+            Console.WriteLine("---------------------------------");
+            Console.WriteLine("Digite ENTER para continuar");
+            Console.ReadLine();
+            return;
+        }
         if (amigoSelecionado == null)
         {
             Console.WriteLine("---------------------------------");
@@ -74,14 +83,25 @@ public class TelaEmprestimo
             Console.ReadLine();
             return;
         }
-        if (!revistadaSelecionada.EstaDisponivel)
+
+        EntidadeBase[] emprestimos = repositorioEmprestimo.SelecionarTodos();
+
+        for (int i = 0; i < emprestimos.Length; i++)
         {
-            Console.WriteLine("---------------------------------");
-            Console.WriteLine($"A revista \"{revistadaSelecionada.Titulo}\" está indisponível!");
-            Console.WriteLine("---------------------------------");
-            Console.WriteLine("Digite ENTER para continuar");
-            Console.ReadLine();
-            return;
+            Emprestimo e = (Emprestimo)emprestimos[i];
+
+            if (e == null)
+                continue;
+
+            if (e.Amigo.Id == amigoSelecionado.Id && e.EstaAberto)
+            {
+                Console.WriteLine("---------------------------------");
+                Console.WriteLine($"O amigo \"{amigoSelecionado.Nome}\" já tem um empréstimo aberto!");
+                Console.WriteLine("---------------------------------");
+                Console.WriteLine("Digite ENTER para continuar");
+                Console.ReadLine();
+                return;
+            }
         }
 
         Emprestimo novoEmprestimo = new Emprestimo(revistadaSelecionada, amigoSelecionado);

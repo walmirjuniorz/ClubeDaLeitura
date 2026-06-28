@@ -41,7 +41,7 @@ public class TelaRevista : TelaBase
             Console.WriteLine(
                 "{0, -7} | {1, -25} | {2, -6} | {3, -4} | {4, -15} | {5, -12}",
                 r.Id, r.Titulo, r.NumeroEdicao, r.AnoPublicacao, r.Caixa.Etiqueta, r.Status.ToString()
-            );
+                );
         }
 
         if (deveExibirCabecalho)

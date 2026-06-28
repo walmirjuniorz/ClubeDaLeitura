@@ -10,7 +10,7 @@ public abstract class TelaBase
         this.nomeEntidade = nomeEntidade;
         this.repositorio = repositorio;
     }
-    public string? ObterOpcaoMenu()
+    public virtual string? ObterOpcaoMenu()
     {
         Console.WriteLine("---------------------------------");
         Console.WriteLine($"Gestão de {nomeEntidade}");
