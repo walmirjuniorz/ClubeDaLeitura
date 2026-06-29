@@ -2,7 +2,7 @@ using ClubeDaLeitura.ConsoleApp.Compartilhado;
 using ClubeDaLeitura.ConsoleApp.ModuloEmprestimo;
 namespace ClubeDaLeitura.ConsoleApp.ModuloAmigo;
 
-public class TelaAmigo : TelaBase
+public class TelaAmigo : TelaBase, ITelaOpcoes
 {
     private readonly RepositorioAmigo repositorioAmigo;
     private readonly RepositorioEmprestimo repositorioEmprestimo;
